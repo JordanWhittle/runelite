@@ -60,7 +60,8 @@ public class FightCavesMobRotator
     // current index into the locations, increases once per wave (rotation).
     private int currentIndex;
 
-    FightCavesMobRotator(int rotation) {
+    FightCavesMobRotator(int rotation)
+    {
         this.currentIndex = rotation;
     }
 
@@ -69,7 +70,8 @@ public class FightCavesMobRotator
      * @param mobsInWave The amount of mobs to be spawned in this wave
      * @return The list of spawn locations to be used in this wave. Mobs should be spawned from highest level to lowest.
      */
-    List<FightCavesSpawnLocation> rotate(int mobsInWave) {
+    List<FightCavesSpawnLocation> rotate(int mobsInWave)
+    {
         int idx = currentIndex++;
         return IntStream.range(idx, idx+mobsInWave)
                 .mapToObj(FightCavesMobRotator::getLocation)
@@ -81,7 +83,8 @@ public class FightCavesMobRotator
      * @param index The index into the spawn locations
      * @return The spawn location.
      */
-    public static FightCavesSpawnLocation getLocation(int index) {
+    public static FightCavesSpawnLocation getLocation(int index)
+    {
         return locations[index % locations.length];
     }
 }
