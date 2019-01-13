@@ -73,15 +73,20 @@ public class FightCavesOverlay extends Overlay
     }
 
     @Override
-    public Dimension render(Graphics2D graphics) {
-        if(plugin.isInFightCaves()) {
+    public Dimension render(Graphics2D graphics)
+    {
+        if(plugin.isInFightCaves())
+        {
             Map<FightCavesSpawnLocation, FightCavesMob> spawns = plugin.getNextSpawns();
-            if(spawns != null) {
+            if(spawns != null)
+            {
                 spawns.forEach((spawnLoc, mob) -> {
                     FightCavesArea area = spawnLoc.getSpawnArea();
                     WorldPoint point = plugin.getWorldPoint(area.getCenterX(), area.getCenterY());
-                    if(point != null) {
-                        if (mobImages.containsKey(mob)) {
+                    if(point != null)
+                    {
+                        if (mobImages.containsKey(mob))
+                        {
                             OverlayUtil.renderImageLocation(client, graphics, LocalPoint.fromWorld(client, point), mobImages.get(mob), 128);
                         }
                     }
@@ -91,7 +96,8 @@ public class FightCavesOverlay extends Overlay
         return null;
     }
 
-    private static BufferedImage resize(BufferedImage img, int newW, int newH) {
+    private static BufferedImage resize(BufferedImage img, int newW, int newH)
+    {
         Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
         BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
 
@@ -102,7 +108,8 @@ public class FightCavesOverlay extends Overlay
         return dimg;
     }
 
-    private static BufferedImage makeSmall(BufferedImage image) {
+    private static BufferedImage makeSmall(BufferedImage image)
+    {
         return resize(image, 96, 96);
     }
 }
