@@ -45,19 +45,22 @@ class FightCavesSpawnRoute
      * Construct a spawn route, calculating all spawns for the entire route.
      * @param routeNumber The route number, there are 15 possible routes at the time of writing (0-14)
      */
-    FightCavesSpawnRoute(int routeNumber) {
+    FightCavesSpawnRoute(int routeNumber)
+    {
         this.routeNumber = routeNumber;
         // rotator to spawn the mobs with
         FightCavesMobRotator rotator = new FightCavesMobRotator(routeNumber);
         // go through every wave
-        for(int wave = 1; wave <= 63; wave++) {
+        for(int wave = 1; wave <= 63; wave++)
+        {
             // calculate which mobs shall appear this wave
             List<FightCavesMob> mobsThisWave = FightCavesUtils.calculateMobsForWave(wave);
             // perform a rotation, getting the mobs for this wave
             List<FightCavesSpawnLocation> spawns = rotator.rotate(mobsThisWave.size());
             // map the spawn locations to the mobs
             Map<FightCavesSpawnLocation, FightCavesMob> waveSpawns = new HashMap<>();
-            for(int j = 0; j < spawns.size(); j++) {
+            for(int j = 0; j < spawns.size(); j++)
+            {
                 waveSpawns.put(spawns.get(j), mobsThisWave.get(j));
             }
             spawnsPerWave.add(waveSpawns);
@@ -67,7 +70,8 @@ class FightCavesSpawnRoute
     /**
      * @return A list where every item is a wave (map of spawns).
      */
-    List<Map<FightCavesSpawnLocation, FightCavesMob>> getSpawnsPerWave() {
+    List<Map<FightCavesSpawnLocation, FightCavesMob>> getSpawnsPerWave()
+    {
         return spawnsPerWave;
     }
 }
