@@ -24,9 +24,14 @@
  */
 package net.runelite.client.plugins.fightcaves;
 
+import net.runelite.api.Client;
+import net.runelite.api.coords.WorldPoint;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static net.runelite.api.Constants.CHUNK_SIZE;
 
 class FightCavesUtils
 {
@@ -59,5 +64,70 @@ class FightCavesUtils
             counter -= mob.firstAppearance;
         }
         return mobs;
+    }
+
+    static WorldPoint getWorldPoint(Client client, int regionId, int regionX, int regionY)
+    {
+        WorldPoint worldPoint = new WorldPoint(
+                ((regionId >>> 8) << 6) + regionX,
+                ((regionId & 0xff) << 6) + regionY,
+                0
+        );
+
+        if (!client.isInInstancedRegion())
+        {
+            return worldPoint;
+        }
+
+        // find instance chunks using the template point. there might be more than one.
+        int[][][] instanceTemplateChunks = client.getInstanceTemplateChunks();
+        for (int x = 0; x < instanceTemplateChunks[0].length; x++)
+        {
+            for (int y = 0; y < instanceTemplateChunks[0][x].length; y++)
+            {
+                int chunkData = instanceTemplateChunks[0][x][y];
+                int rotation = chunkData >> 1 & 0x3;
+                int templateChunkY = (chunkData >> 3 & 0x7FF) * CHUNK_SIZE;
+                int templateChunkX = (chunkData >> 14 & 0x3FF) * CHUNK_SIZE;
+                if (worldPoint.getX() >= templateChunkX
+                        && worldPoint.getX() < templateChunkX + CHUNK_SIZE
+                        && worldPoint.getY() >= templateChunkY
+                        && worldPoint.getY() < templateChunkY + CHUNK_SIZE)
+                {
+
+                    WorldPoint p = new WorldPoint(client.getBaseX() + x * CHUNK_SIZE + (worldPoint.getX() & (CHUNK_SIZE - 1)),
+                            client.getBaseY() + y * CHUNK_SIZE + (worldPoint.getY() & (CHUNK_SIZE - 1)),
+                            worldPoint.getPlane());
+                    p = rotate(p, rotation);
+                    return p;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Rotate the coordinates in the chunk according to chunk rotation
+     *
+     * @param point    point
+     * @param rotation rotation
+     * @return world point
+     */
+    private static WorldPoint rotate(WorldPoint point, int rotation)
+    {
+        int chunkX = point.getX() & -CHUNK_SIZE;
+        int chunkY = point.getY() & -CHUNK_SIZE;
+        int x = point.getX() & (CHUNK_SIZE - 1);
+        int y = point.getY() & (CHUNK_SIZE - 1);
+        switch (rotation)
+        {
+            case 1:
+                return new WorldPoint(chunkX + y, chunkY + (CHUNK_SIZE - 1 - x), point.getPlane());
+            case 2:
+                return new WorldPoint(chunkX + (CHUNK_SIZE - 1 - x), chunkY + (CHUNK_SIZE - 1 - y), point.getPlane());
+            case 3:
+                return new WorldPoint(chunkX + (CHUNK_SIZE - 1 - y), chunkY + x, point.getPlane());
+        }
+        return point;
     }
 }

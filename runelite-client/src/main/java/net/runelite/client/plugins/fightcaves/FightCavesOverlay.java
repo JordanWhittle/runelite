@@ -79,7 +79,7 @@ public class FightCavesOverlay extends Overlay
             {
                 spawns.forEach((spawnLoc, mob) -> {
                     FightCavesArea area = spawnLoc.getSpawnArea();
-                    WorldPoint point = plugin.getWorldPoint(area.getCenterX(), area.getCenterY());
+                    WorldPoint point = FightCavesUtils.getWorldPoint(client, FightCavesPlugin.FIGHT_CAVES_REGION_ID, area.getCenterX(), area.getCenterY());
                     if (point != null)
                     {
                         if (mobImages.containsKey(mob))
