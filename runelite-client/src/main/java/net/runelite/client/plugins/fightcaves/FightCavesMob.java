@@ -29,13 +29,14 @@ import java.util.Arrays;
 /**
  * Mobs for the fight caves.
  * It is important that these are ordered in this enum by their first appearance wave.
- *    FightCavesUtils::calculateMobsForWave currently does not sort these values and thus depends on the order.
- *
+ * FightCavesUtils::calculateMobsForWave currently does not sort these values and thus depends on the order.
+ * <p>
  * Healers could be added here but I have found their spawn positions to be useless information.
- *
+ * <p>
  * The level 22s that 45s split into are omitted from this list because they don't spawn at the beginning of a wave.
  */
-public enum FightCavesMob {
+public enum FightCavesMob
+{
     TZTOK_JAD(63, 702),
     // healer would go here if desired
     KET_ZEK(31, 360),
@@ -49,17 +50,20 @@ public enum FightCavesMob {
     // the combat level of this mob
     public final int level;
 
-    FightCavesMob(int firstAppearance, int level) {
+    FightCavesMob(int firstAppearance, int level)
+    {
         this.firstAppearance = firstAppearance;
         this.level = level;
     }
 
     /**
      * Find a mob using its combat level.
+     *
      * @param level The combat level to search for
      * @return The FightCavesMob with the appropriate combat level, or null if no monster matches this level.
      */
-    public static FightCavesMob getByLevel(int level) {
+    public static FightCavesMob getByLevel(int level)
+    {
         return Arrays.stream(values())
                 .filter(x -> x.level == level)
                 .findFirst()

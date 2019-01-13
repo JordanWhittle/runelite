@@ -24,7 +24,8 @@
  */
 package net.runelite.client.plugins.fightcaves;
 
-public enum FightCavesSpawnLocation {
+public enum FightCavesSpawnLocation
+{
     CENTER(new FightCavesArea(24, 43, 26, 42)),
     NORTH_WEST(new FightCavesArea(7, 22, 39, 60)),
     SOUTH_EAST(new FightCavesArea(45, 56, 19, 33)),
@@ -33,11 +34,13 @@ public enum FightCavesSpawnLocation {
 
     private FightCavesArea spawnArea;
 
-    FightCavesSpawnLocation(FightCavesArea spawnArea) {
+    FightCavesSpawnLocation(FightCavesArea spawnArea)
+    {
         this.spawnArea = spawnArea;
     }
 
-    public FightCavesArea getSpawnArea() {
+    public FightCavesArea getSpawnArea()
+    {
         return spawnArea;
     }
 }

@@ -33,11 +33,11 @@ class FightCavesUtils
     /**
      * Calculate how many mobs will appear on a wave
      * Algorithm works as follows:
-     *  Each mob is assigned a number (the first wave they appear at)
-     *  while current_wave > 0:
-     *      Find a mob with the highest wave in their first appearance
-     *      add the mob to the spawn list
-     *      current_wave -= the wave which the mob first appears
+     * Each mob is assigned a number (the first wave they appear at)
+     * while current_wave > 0:
+     * Find a mob with the highest wave in their first appearance
+     * add the mob to the spawn list
+     * current_wave -= the wave which the mob first appears
      *
      * @param wave The wave number to calculate for
      * @return A list of mobs in the wave, implicitly ordered by level
@@ -47,7 +47,7 @@ class FightCavesUtils
         int counter = wave;
         List<FightCavesMob> mobs = new ArrayList<>();
         // while we still need to spawn mobs
-        while(counter > 0)
+        while (counter > 0)
         {
             final int c = counter;
             // find the mob that appears at the highest wave

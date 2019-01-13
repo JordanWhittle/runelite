@@ -4,6 +4,7 @@ import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 
 @ConfigGroup("fightCaves")
-interface FightCavesConfig extends Config {
+interface FightCavesConfig extends Config
+{
 
 }

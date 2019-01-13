@@ -47,6 +47,7 @@ public class FightCavesArea
 
     /**
      * Checks if this area contains a point.
+     *
      * @param x The region x coordinate
      * @param y The region y coordinate
      * @return true If the supplied coordinates are within the region, else false.
@@ -61,7 +62,7 @@ public class FightCavesArea
      */
     int getCenterX()
     {
-        return Math.round(((float)minX + (float)maxX) / 2);
+        return Math.round(((float) minX + (float) maxX) / 2);
     }
 
     /**
@@ -69,11 +70,12 @@ public class FightCavesArea
      */
     int getCenterY()
     {
-        return Math.round(((float)minY + (float)maxY) / 2);
+        return Math.round(((float) minY + (float) maxY) / 2);
     }
 
     /**
      * Checks if this area contains a world point.
+     *
      * @param worldPoint The point in the world
      * @return true If the area contains this point, else false.
      */

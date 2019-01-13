@@ -30,7 +30,7 @@ import java.util.stream.IntStream;
 
 /**
  * Controls the rotation of spawns for the Fight caves.
- *
+ * <p>
  * The spawning system works by rotating through FightCavesSpawnLocation::locations as a circular array.
  * Every wave, the index increments. Then, Each mob to be spawned is located by iterating from the current index for
  * the count of mobs to be spawned. The mobs are spawned from highest level to lowest level.
@@ -67,19 +67,21 @@ public class FightCavesMobRotator
 
     /**
      * Perform a rotation (i.e Begin a new wave)
+     *
      * @param mobsInWave The amount of mobs to be spawned in this wave
      * @return The list of spawn locations to be used in this wave. Mobs should be spawned from highest level to lowest.
      */
     List<FightCavesSpawnLocation> rotate(int mobsInWave)
     {
         int idx = currentIndex++;
-        return IntStream.range(idx, idx+mobsInWave)
+        return IntStream.range(idx, idx + mobsInWave)
                 .mapToObj(FightCavesMobRotator::getLocation)
                 .collect(Collectors.toList());
     }
 
     /**
      * Gets a spawn location by index, will loop back around if index is > 14
+     *
      * @param index The index into the spawn locations
      * @return The spawn location.
      */

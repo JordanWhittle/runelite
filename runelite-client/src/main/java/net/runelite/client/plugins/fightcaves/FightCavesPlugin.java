@@ -30,36 +30,44 @@ import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.events.*;
+import net.runelite.api.events.ChatMessage;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.NpcSpawned;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 import static net.runelite.api.Constants.CHUNK_SIZE;
 
 /**
  * Fight caves plugin.
- *
+ * <p>
  * How it works:
- *  Calculate every possible wave in the fight caves (there are 15 sets of 63 waves which make up all possibilities)
- *  Whilst the player plays the fight caves, monitor what spawns where and what doesn't spawn where.
- *  Every time you find some information (e.g wave 1 has a tz-kih spawning to the east), find all combinations which
- *  have a tz-kih spawning to the east at wave 1.
- *  After a few waves worth of criteria, the route will be known and the plugin will be able to predict the next waves
- *  from that point onward.
+ * Calculate every possible wave in the fight caves (there are 15 sets of 63 waves which make up all possibilities)
+ * Whilst the player plays the fight caves, monitor what spawns where and what doesn't spawn where.
+ * Every time you find some information (e.g wave 1 has a tz-kih spawning to the east), find all combinations which
+ * have a tz-kih spawning to the east at wave 1.
+ * After a few waves worth of criteria, the route will be known and the plugin will be able to predict the next waves
+ * from that point onward.
  */
 @PluginDescriptor(
         name = "Fight Caves",
         description = "Predicts mob spawns in the fight caves after watching you play for a short while.",
-        tags = { "minigame", "fight cave" }
+        tags = {"minigame", "fight cave"}
 )
 @Singleton
 @Slf4j
@@ -116,7 +124,7 @@ public class FightCavesPlugin extends Plugin
     @Subscribe
     public void onGameStateChanged(GameStateChanged event)
     {
-        if(event.getGameState() == GameState.LOGIN_SCREEN)
+        if (event.getGameState() == GameState.LOGIN_SCREEN)
         {
             wasInFightCavesLastCheck = false;
         }
@@ -170,6 +178,7 @@ public class FightCavesPlugin extends Plugin
 
     /**
      * Find the visible spawn locations that the actor can see.
+     *
      * @param actor The actor to check
      * @return A list of every spawn location where the actor would be able to see an npc spawn in it.
      */
@@ -184,9 +193,9 @@ public class FightCavesPlugin extends Plugin
     public void onGameTick(GameTick tick)
     {
         boolean inCaves = isInFightCaves();
-        if(inCaves)
+        if (inCaves)
         {
-            if(!wasInFightCavesLastCheck)
+            if (!wasInFightCavesLastCheck)
             {
                 System.out.println("Player entered caves");
                 wasInFightCavesLastCheck = true;
@@ -217,10 +226,9 @@ public class FightCavesPlugin extends Plugin
                     attemptSolveSpawns();
                 }
             }
-        }
-        else
+        } else
         {
-            if(wasInFightCavesLastCheck)
+            if (wasInFightCavesLastCheck)
             {
                 System.out.println("Player left caves");
                 wasInFightCavesLastCheck = false;
@@ -253,7 +261,9 @@ public class FightCavesPlugin extends Plugin
         String json = configManager.getConfiguration(CONFIG_GROUP, "gatheredWaveCriteria");
         if (json != null && !json.isEmpty())
         {
-            Type typeOfHashMap = new TypeToken<HashMap<Integer, FightCavesWaveCriteria>>() {}.getType();
+            Type typeOfHashMap = new TypeToken<HashMap<Integer, FightCavesWaveCriteria>>()
+            {
+            }.getType();
             gatheredWaveCriteria = gson.fromJson(json, typeOfHashMap);
             System.out.println(json);
             attemptSolveSpawns();
@@ -266,12 +276,11 @@ public class FightCavesPlugin extends Plugin
                 final int savedWave = Integer.parseInt(lastKnownWave);
                 System.out.println("Loading saved wave number " + savedWave);
                 String isPaused = configManager.getConfiguration(CONFIG_GROUP, "isPaused");
-                if("true".equals(isPaused))
+                if ("true".equals(isPaused))
                 {
                     currentWave = savedWave;
                     System.out.println("Waves were paused");
-                }
-                else
+                } else
                 {
                     System.out.println("Waves were not paused");
                     currentWave = savedWave - 1;
@@ -293,7 +302,7 @@ public class FightCavesPlugin extends Plugin
         reset();
         client.addChatMessage(ChatMessageType.GAME, "", "Entering fight caves", "");
 
-        if(route == null)
+        if (route == null)
         {
             String message = "For fastest calculations, stand where you can see the south, south-east and center spawns. (optional)";
             client.addChatMessage(ChatMessageType.GAME, "", message, "");
@@ -332,7 +341,7 @@ public class FightCavesPlugin extends Plugin
                 onWaveStart(wave);
             }
 
-            if("<col=ef1020>The Fight Cave has been paused. You may now log out.".equals(message.getMessage()))
+            if ("<col=ef1020>The Fight Cave has been paused. You may now log out.".equals(message.getMessage()))
             {
                 configManager.setConfiguration(CONFIG_GROUP, "isPaused", "true");
             }
@@ -355,6 +364,7 @@ public class FightCavesPlugin extends Plugin
 
     /**
      * A wave has just started!
+     *
      * @param wave The wave which started.
      */
     private void onWaveStart(int wave)
@@ -375,6 +385,7 @@ public class FightCavesPlugin extends Plugin
 
     /**
      * Find the spawn location that the actor is standing in
+     *
      * @param actor The actor to check
      * @return The location the actor is standing in, or null if they aren't in one.
      */
@@ -389,12 +400,13 @@ public class FightCavesPlugin extends Plugin
     /**
      * An NPC has spawned. This differs from the usual spawn callback in that it actually knows when the npc has SPAWNED
      * and not just popped into existence because you've walked near to it.
+     *
      * @param npc The npc which just spawned.
      */
     private void onFightCaveNpcSpawned(NPC npc)
     {
         // if we have a route already, there is no point in caring about this
-        if(route == null)
+        if (route == null)
         {
             FightCavesSpawnLocation location = getSpawnLocation(npc);
             if (location != null)
@@ -435,8 +447,7 @@ public class FightCavesPlugin extends Plugin
                 saveGatheredWaveData();
                 client.addChatMessage(ChatMessageType.GAME, "", message, "");
                 route = routes.get(0);
-            }
-            else
+            } else
             {
                 if (routes.size() < lastPossibleSpawns)
                 {
@@ -450,6 +461,7 @@ public class FightCavesPlugin extends Plugin
 
     /**
      * Gets the next wave spawn locations
+     *
      * @return A map of locations with mobs in. If nothing spawns at a location, the location won't be in the key set.
      */
     Map<FightCavesSpawnLocation, FightCavesMob> getNextSpawns()
@@ -468,6 +480,7 @@ public class FightCavesPlugin extends Plugin
 
     /**
      * Rotate the coordinates in the chunk according to chunk rotation
+     *
      * @param point    point
      * @param rotation rotation
      * @return world point

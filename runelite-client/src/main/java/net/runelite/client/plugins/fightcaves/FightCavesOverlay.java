@@ -33,12 +33,9 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.util.ImageUtil;
 
-import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,7 +59,7 @@ public class FightCavesOverlay extends Overlay
         mobImages.put(FightCavesMob.TZ_KIH, loadImage("Tz-Kih"));
         mobImages.put(FightCavesMob.TZ_KEK, loadImage("Tz-Kek"));
         mobImages.put(FightCavesMob.TOK_XIL, loadImage("Tok-Xil"));
-        mobImages.put(FightCavesMob.YT_MEJKOT,loadImage("Yt-MejKot"));
+        mobImages.put(FightCavesMob.YT_MEJKOT, loadImage("Yt-MejKot"));
         mobImages.put(FightCavesMob.KET_ZEK, loadImage("Ket-Zek"));
         mobImages.put(FightCavesMob.TZTOK_JAD, loadImage("TzTok-Jad"));
     }
@@ -75,15 +72,15 @@ public class FightCavesOverlay extends Overlay
     @Override
     public Dimension render(Graphics2D graphics)
     {
-        if(plugin.isInFightCaves())
+        if (plugin.isInFightCaves())
         {
             Map<FightCavesSpawnLocation, FightCavesMob> spawns = plugin.getNextSpawns();
-            if(spawns != null)
+            if (spawns != null)
             {
                 spawns.forEach((spawnLoc, mob) -> {
                     FightCavesArea area = spawnLoc.getSpawnArea();
                     WorldPoint point = plugin.getWorldPoint(area.getCenterX(), area.getCenterY());
-                    if(point != null)
+                    if (point != null)
                     {
                         if (mobImages.containsKey(mob))
                         {

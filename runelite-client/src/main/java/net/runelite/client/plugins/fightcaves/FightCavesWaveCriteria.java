@@ -36,8 +36,9 @@ class FightCavesWaveCriteria
 
     /**
      * Record that a spawn has occured
+     *
      * @param location The location the mob spawned at
-     * @param mob The mob which spawned
+     * @param mob      The mob which spawned
      */
     void specify(FightCavesSpawnLocation location, FightCavesMob mob)
     {
@@ -46,6 +47,7 @@ class FightCavesWaveCriteria
 
     /**
      * Get all of the recorded spawns
+     *
      * @return A map of recorded spawns
      */
     Map<FightCavesSpawnLocation, FightCavesMob> getSpecifiedSpawns()
