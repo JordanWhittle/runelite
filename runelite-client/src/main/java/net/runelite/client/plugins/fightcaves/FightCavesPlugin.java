@@ -266,10 +266,13 @@ public class FightCavesPlugin extends Plugin
                 final int savedWave = Integer.parseInt(lastKnownWave);
                 System.out.println("Loading saved wave number " + savedWave);
                 String isPaused = configManager.getConfiguration(CONFIG_GROUP, "isPaused");
-                if("true".equals(isPaused)) {
+                if("true".equals(isPaused))
+                {
                     currentWave = savedWave;
                     System.out.println("Waves were paused");
-                } else {
+                }
+                else
+                {
                     System.out.println("Waves were not paused");
                     currentWave = savedWave - 1;
                 }
@@ -290,7 +293,8 @@ public class FightCavesPlugin extends Plugin
         reset();
         client.addChatMessage(ChatMessageType.GAME, "", "Entering fight caves", "");
 
-        if(route == null) {
+        if(route == null)
+        {
             String message = "For fastest calculations, stand where you can see the south, south-east and center spawns. (optional)";
             client.addChatMessage(ChatMessageType.GAME, "", message, "");
         }
@@ -306,7 +310,8 @@ public class FightCavesPlugin extends Plugin
         currentWave = 0;
     }
 
-    private void clearConfig() {
+    private void clearConfig()
+    {
         // clear gathered wave criteria
         configManager.unsetConfiguration(CONFIG_GROUP, "gatheredWaveCriteria");
         // clear last known wave
@@ -327,7 +332,8 @@ public class FightCavesPlugin extends Plugin
                 onWaveStart(wave);
             }
 
-            if("<col=ef1020>The Fight Cave has been paused. You may now log out.".equals(message.getMessage())) {
+            if("<col=ef1020>The Fight Cave has been paused. You may now log out.".equals(message.getMessage()))
+            {
                 configManager.setConfiguration(CONFIG_GROUP, "isPaused", "true");
             }
         }
@@ -466,12 +472,14 @@ public class FightCavesPlugin extends Plugin
      * @param rotation rotation
      * @return world point
      */
-    private static WorldPoint rotate(WorldPoint point, int rotation) {
+    private static WorldPoint rotate(WorldPoint point, int rotation)
+    {
         int chunkX = point.getX() & -CHUNK_SIZE;
         int chunkY = point.getY() & -CHUNK_SIZE;
         int x = point.getX() & (CHUNK_SIZE - 1);
         int y = point.getY() & (CHUNK_SIZE - 1);
-        switch (rotation) {
+        switch (rotation)
+        {
             case 1:
                 return new WorldPoint(chunkX + y, chunkY + (CHUNK_SIZE - 1 - x), point.getPlane());
             case 2:
